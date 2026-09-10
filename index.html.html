@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Ujian Online Informatika - ASTS Ganjil Kelas 8</title>
+  <style>
+    :root {
+      --primary: #4338ca;
+      --primary-hover: #3730a3;
+      --bg-main: #f1f5f9;
+      --card-bg: #ffffff;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --success: #10b981;
+      --warning: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      -webkit-touch-callout: none !important;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 0;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 480px;
+      min-height: 100vh;
+      background: var(--bg-main);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* HEADER BANNER */
+    .app-header {
+      background: linear-gradient(135deg, #3730a3, #4f46e5);
+      color: #ffffff;
+      padding: 16px 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .app-header h1 {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .app-header p {
+      font-size: 13px;
+      opacity: 0.85;
+      margin-top: 2px;
+    }
+
+    /* CARD SYSTEM */
+    .content-body {
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      border: 1px solid var(--border-color);
+    }
+
+    /* TOP BAR: PROGRESS & TIMER */
+    .top-info-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+    }
+
+    .info-box-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .info-box-val {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .progress-bar-bg {
+      flex: 1;
+      height: 8px;
+      background: #e0e7ff;
+      border-radius: 99px;
+      margin: 0 14px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--primary);
+      transition: width 0.3s ease;
+    }
+
+    /* QUESTION & OPTIONS */
+    .question-title {
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.5;
+      margin-bottom: 16px;
+      color: #0f172a;
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border-color);
+      background: #ffffff;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .option-item.selected {
+      border-color: var(--primary);
+      background-color: #f5f3ff;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .radio-circle {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid #cbd5e1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .option-item.selected .radio-circle {
+      border-color: var(--primary);
+      background-color: var(--primary);
+    }
+
+    .option-item.selected .radio-circle::after {
+      content: "";
+      width: 8px;
+      height: 8px;
+      background: white;
+      border-radius: 50%;
+    }
+
+    /* BUTTON CONTROLS */
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 20px;
+      padding-top: 14px;
+      border-top: 1px solid #f1f5f9;
+    }
+
+    .btn-nav {
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 14px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-prev {
+      background: #f1f5f9;
+      color: var(--text-muted);
+    }
+
+    .btn-next {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* NAVIGASI GRID SOAL (1-40) */
+    .nav-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .nav-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .nav-legend {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--success);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--success);
+      border-radius: 50%;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 6px;
+    }
+
+    .grid-num {
+      aspect-ratio: 1;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background: #f8fafc;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .grid-num.active {
+      border-color: var(--primary);
+      background: #e0e7ff;
+      color: var(--primary);
+    }
+
+    .grid-num.answered {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* SCREEN MANAGEMENT */
+    .screen { display: none; }
+    .screen.active { display: flex; flex-direction: column; gap: 12px; }
+
+    /* FORM SCREEN */
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+    .form-group input, .form-group select {
+      width: 100%; padding: 12px; border-radius: 8px; border: 1.5px solid var(--border-color); font-size: 15px; outline: none;
+    }
+    .btn-submit-start {
+      width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: 700; font-size: 16px; cursor: pointer;
+    }
+
+    /* OVERLAY ANTI-LENS */
+    #anti-lens-overlay {
+      display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000000; z-index: 999999;
+      justify-content: center; align-items: center; color: white; text-align: center; padding: 20px;
+    }
+
+    .footer-text {
+      text-align: center; font-size: 11px; color: var(--text-muted); margin: 12px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LAYER ANTI GOOGLE LENS -->
+  <div id="anti-lens-overlay">
+    <div>
+      <h2 style="color: #ef4444; margin-bottom: 8px;">⚠️ DILARANG MEMBUKA ASISTEN / LENS!</h2>
+      <p style="font-size: 14px; color: #ccc;">Kembali fokus ke layar ujian untuk melanjutkan.</p>
+    </div>
+  </div>
+
+  <div class="app-container">
+    <div class="app-header">
+      <h1>Ujian Online Informatika</h1>
+      <p>ASTS Ganjil Kelas 8</p>
+    </div>
+
+    <div class="content-body">
+
+      <!-- LAYAR 1: START FORM -->
+      <div id="screen-start" class="screen active">
+        <div class="card">
+          <div class="form-group">
+            <label>Nama Lengkap</label>
+            <input type="text" id="nama" placeholder="Masukkan Nama Lengkap..." autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label>Kelas</label>
+            <select id="kelas">
+              <option value="">-- Pilih Kelas --</option>
+              <option value="8-A">8-A</option>
+              <option value="8-B">8-B</option>
+              <option value="8-C">8-C</option>
+              <option value="8-D">8-D</option>
+              <option value="8-E">8-E</option>
+            </select>
+          </div>
+          <button class="btn-submit-start" onclick="startQuiz()">Mulai Kerjakan Ujian</button>
+        </div>
+      </div>
+
+      <!-- LAYAR 2: KUIS -->
+      <div id="screen-quiz" class="screen">
+        <!-- BARIS ATAS: SOAL KE & TIMER -->
+        <div class="card top-info-card">
+          <div>
+            <div class="info-box-label">Soal Ke</div>
+            <div class="info-box-val" id="text-progress">1 <span style="font-size: 12px; color: var(--text-muted);">/ 40</span></div>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progress-fill"></div>
+          </div>
+          <div style="text-align: right;">
+            <div class="info-box-label">Sisa Waktu</div>
+            <div class="info-box-val" id="text-timer">60:00</div>
+          </div>
+        </div>
+
+        <!-- PERINGATAN VIOLASI -->
+        <div id="warning-box" style="background: #fef2f2; color: #991b1b; padding: 8px; border-radius: 8px; font-size: 12px; font-weight: bold; text-align: center;">
+          Peringatan Violasi: 0 / 2
+        </div>
+
+        <!-- CARD SOAL & OPSI -->
+        <div class="card">
+          <div class="question-title" id="question-text">Loading Soal...</div>
+          <div class="options-list" id="options-container"></div>
+          
+          <div class="controls">
+            <button class="btn-nav btn-prev" id="btn-prev" onclick="navigate(-1)">&lt; Prev</button>
+            <button class="btn-nav btn-next" id="btn-next" onclick="navigate(1)">Next &gt;</button>
+          </div>
+        </div>
+
+        <!-- NAVIGASI GRID SOAL (1-40) -->
+        <div class="card">
+          <div class="nav-header">
+            <span class="nav-title">Navigasi Soal:</span>
+            <span class="nav-legend"><span class="legend-dot"></span> Terjawab</span>
+          </div>
+          <div class="grid-container" id="grid-navigation"></div>
+        </div>
+      </div>
+
+      <!-- LAYAR 3: HASIL SELESAI -->
+      <div id="screen-result" class="screen">
+        <div class="card" style="text-align: center; padding: 24px;">
+          <h2>Ujian Selesai!</h2>
+          <p style="font-size: 14px; color: var(--text-muted); margin-top: 4px;">Data ujian kamu telah dikirim ke server.</p>
+          <div style="font-size: 48px; font-weight: 800; color: var(--primary); margin: 20px 0;" id="res-score">0</div>
+          <p style="font-size: 14px;">Nama: <b id="res-nama">-</b> | Kelas: <b id="res-kelas">-</b></p>
+          <div id="teacher-quote" style="display:none; background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; padding: 12px; border-radius: 8px; font-weight: 700; margin-top: 16px;">
+            bu Mona Bangga sama kamu!
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-text">UPT SMP Negeri 5 Tangerang © 2026</div>
+
+    </div>
+  </div>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx_GANTI_DENGAN_URL_SCRIPT_ANDA/exec";
+
+    // MASTER DATABASE (40 SOAL INFORMATIKA KELAS 8 ASTS GANJIL)
+    const rawQuizData = [
+      { id: 1, q: "Menentukan informasi penting merupakan bagian dari ....", opt: ["A. Dekomposisi", "B. Algoritma", "C. Abstraksi", "D. Pola"], ans: 2 },
+      { id: 2, q: "Kegiatan mengumpulkan, mengolah, dan menyajikan data disebut ....", opt: ["A. Analisis data", "B. Komunikasi data", "C. Pengolahan data", "D. Penyimpanan data"], ans: 0 },
+      { id: 3, q: "Struktur langkah terurut untuk menyelesaikan masalah dinamakan ....", opt: ["A. Dekomposisi", "B. Algoritma", "C. Data", "D. Grafik"], ans: 1 },
+      { id: 4, q: "Data yang akurat adalah data yang ....", opt: ["A. Salah", "B. Sesuai fakta", "C. Tidak lengkap", "D. Acak"], ans: 1 },
+      { id: 5, q: "Berpikir komputasional membantu meningkatkan kemampuan ....", opt: ["A. Kritis dan logis", "B. Bermain game", "C. Menghafal", "D. Menyalin tugas"], ans: 0 },
+      { id: 6, q: "Persentase digunakan untuk menunjukkan ....", opt: ["A. Perbandingan dalam seratus bagian", "B. Nama data", "C. Warna data", "D. Ukuran kertas"], ans: 0 },
+      { id: 7, q: "Langkah-langkah logis dan terurut untuk menyelesaikan masalah disebut ....", opt: ["A. Langkah penyelesaian", "B. Data mentah", "C. Program komputer", "D. Grafik data"], ans: 0 },
+      { id: 8, q: "Salah satu manfaat berpikir komputasional bagi siswa adalah ....", opt: ["A. Memudahkan penyelesaian masalah", "B. Menambah kesulitan belajar", "C. Mengurangi kreativitas", "D. Menghilangkan logika"], ans: 0 },
+      { id: 9, q: "Aplikasi Google Forms umumnya digunakan untuk ....", opt: ["A. Menggambar grafik", "B. Mengumpulkan data", "C. Mengedit video", "D. Membuat game"], ans: 1 },
+      { id: 10, q: "Jenis data yang berupa angka disebut sebagai data ....", opt: ["A. Kualitatif", "B. Kuantitatif", "C. Visual", "D. Naratif"], ans: 1 },
+      { id: 11, q: "Berpikir komputasional dapat diterapkan dalam ....", opt: ["A. Pemrograman saja", "B. Kehidupan sehari-hari saja", "C. Berbagai bidang kehidupan", "D. Sekolah saja"], ans: 2 },
+      { id: 12, q: "Tujuan utama dari penyajian data adalah ....", opt: ["A. Memudahkan pemahaman data", "B. Menghapus data", "C. Menambah data", "D. Mengurangi data"], ans: 0 },
+      { id: 13, q: "Definisi pengenalan pola dalam berpikir komputasional adalah ....", opt: ["A. Mencari perbedaan data", "B. Mencari kesamaan dalam masalah", "C. Menghapus informasi", "D. Membuat grafik"], ans: 1 },
+      { id: 14, q: "Hasil yang diharapkan dari penerapan berpikir komputasional adalah ....", opt: ["A. Solusi masalah terstruktur", "B. Data yang hilang", "C. Grafik kosong", "D. Komputer baru"], ans: 0 },
+      { id: 15, q: "Data mentah diartikan sebagai ....", opt: ["A. Informasi yang belum diolah", "B. Hasil pengolahan data", "C. Kesimpulan penelitian", "D. Grafik hasil penelitian"], ans: 0 },
+      { id: 16, q: "Data nama siswa termasuk dalam jenis data ....", opt: ["A. Numerik", "B. Kuantitatif", "C. Kualitatif", "D. Statistik"], ans: 2 },
+      { id: 17, q: "Tujuan utama dari berpikir komputasional adalah ....", opt: ["A. Menyelesaikan masalah secara efektif", "B. Menghafal kode program", "C. Membuat komputer baru", "D. Menambah pekerjaan"], ans: 0 },
+      { id: 18, q: "Saat membuat jadwal belajar harian, kita menerapkan ....", opt: ["A. Berpikir komputasional", "B. Bermain game", "C. Menggambar", "D. Menulis cerita"], ans: 0 },
+      { id: 19, q: "Output dari proses pengolahan data berupa ....", opt: ["A. Data mentah", "B. Kesimpulan", "C. Formulir", "D. File kosong"], ans: 1 },
+      { id: 20, q: "Prinsip abstraksi berarti ....", opt: ["A. Memilih informasi penting", "B. Menghapus semua data", "C. Menambah masalah", "D. Menggambar diagram"], ans: 0 },
+      { id: 21, q: "Langkah pertama yang harus dilakukan dalam analisis data adalah ....", opt: ["A. Menyimpulkan data", "B. Mengumpulkan data", "C. Membuat grafik", "D. Mengolah data"], ans: 1 },
+      { id: 22, q: "Istilah dekomposisi memiliki arti ....", opt: ["A. Memecah masalah menjadi bagian kecil", "B. Menggabungkan masalah", "C. Menghapus data", "D. Menyimpan data"], ans: 0 },
+      { id: 23, q: "Menghilangkan bagian yang tidak penting dalam masalah disebut ....", opt: ["A. Abstraksi", "B. Bermain", "C. Menyalin data", "D. Menghapus data"], ans: 0 },
+      { id: 24, q: "Dampak dari penggunaan data yang tidak lengkap adalah ....", opt: ["A. Analisis lebih baik", "B. Kesimpulan kurang tepat", "C. Grafik lebih menarik", "D. Penyimpanan lebih cepat"], ans: 1 },
+      { id: 25, q: "Manfaat utama dari analisis data adalah ....", opt: ["A. Membantu pengambilan keputusan", "B. Menghapus informasi", "C. Menambah masalah", "D. Mengurangi fakta"], ans: 0 },
+      { id: 26, q: "Visualisasi diagram garis sangat cocok digunakan untuk ....", opt: ["A. Menampilkan perkembangan data dari waktu ke waktu", "B. Menampilkan foto", "C. Menyimpan data", "D. Menulis laporan"], opt: 0, ans: 0 },
+      { id: 27, q: "Diagram lingkaran (pie chart) digunakan untuk memperlihatkan ....", opt: ["A. Urutan proses", "B. Hubungan data", "C. Persentase bagian dari keseluruhan", "D. Perubahan waktu"], ans: 2 },
+      { id: 28, q: "Salah satu contoh data kuantitatif di bawah ini adalah ....", opt: ["A. Nama siswa", "B. Alamat siswa", "C. Umur siswa", "D. Hobi siswa"], ans: 2 },
+      { id: 29, q: "Struktur kumpulan data yang disusun dalam bentuk baris dan kolom disebut ....", opt: ["A. Grafik", "B. Tabel", "C. Diagram", "D. Algoritma"], ans: 1 },
+      { id: 30, q: "Data yang diperoleh secara langsung dari sumber utama dinamakan ....", opt: ["A. Data sekunder", "B. Data primer", "C. Data digital", "D. Data analog"], ans: 1 },
+      { id: 31, q: "Visualisasi data yang paling tepat untuk membandingkan jumlah data antar kategori adalah ....", opt: ["A. Diagram batang", "B. Diagram garis", "C. Diagram alur", "D. Diagram jaringan"], ans: 0 },
+      { id: 32, q: "Masalah yang rumit akan lebih mudah diselesaikan jika menggunakan teknik ....", opt: ["A. Dekomposisi", "B. Mengabaikannya", "C. Menebak jawaban", "D. Menyalin pekerjaan orang lain"], ans: 0 },
+      { id: 33, q: "Perangkat lunak Microsoft Excel utamanya digunakan untuk ....", opt: ["A. Mengolah data", "B. Mengedit video", "C. Membuat animasi", "D. Bermain game"], ans: 0 },
+      { id: 34, q: "Syarat utama penulisan algoritma yang baik adalah harus disusun secara ....", opt: ["A. Acak", "B. Berurutan", "C. Terbalik", "D. Bebas"], ans: 1 },
+      { id: 35, q: "Empat pilar utama berpikir komputasional terdiri dari ....", opt: ["A. Input dan output", "B. Hardware dan software", "C. Dekomposisi, pola, abstraksi, algoritma", "D. CPU dan RAM"], ans: 2 },
+      { id: 36, q: "Contoh penerapan pengenalan pola dalam pembelajaran adalah ....", opt: ["A. Menemukan kesamaan soal matematika", "B. Menghapus data", "C. Membuat video", "D. Menyimpan gambar"], ans: 0 },
+      { id: 37, q: "Salah satu contoh penerapan algoritma sederhana dalam kehidupan sehari-hari adalah ....", opt: ["A. Bermain sepak bola", "B. Langkah membuat teh manis", "C. Menonton televisi", "D. Membaca buku"], ans: 1 },
+      { id: 38, q: "Kemampuan Berpikir Komputasional sangat krusial dimiliki pada era ....", opt: ["A. Batu", "B. Pertanian", "C. Digital", "D. Kerajaan"], ans: 2 },
+      { id: 39, q: "Tujuan utama pengurutan data pada tabel adalah ....", opt: ["A. Menampilkan data secara teratur", "B. Menghapus data", "C. Menyimpan gambar", "D. Membuat program"], ans: 0 },
+      { id: 40, q: "Pengertian dasar Berpikir Komputasional adalah ....", opt: ["A. Cara bermain komputer", "B. Cara berpikir logis untuk menyelesaikan masalah", "C. Cara memperbaiki komputer", "D. Cara menggunakan internet"], ans: 1 }
+    ];
+
+    let activeQuizData = [];
+    let namaSiswa = "", kelasSiswa = "";
+    let currentIndex = 0;
+    let userAnswers = {};
+    let violations = 0, maxViolations = 2;
+    let timeRemaining = 60 * 60; // 60 Menit
+    let timerInterval = null;
+    let isSubmitted = false;
+
+    // ALGORITMA SHUFFLE (FISHER-YATES)
+    function shuffleArray(array) {
+      let arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    // ACAK SOAL & OPSI JAWABAN
+    function prepareShuffledQuiz() {
+      let shuffled = shuffleArray(rawQuizData);
+      activeQuizData = shuffled.map(item => {
+        let originalOptions = item.opt.map((optText, idx) => ({
+          text: optText.replace(/^[A-D]\.\s*/, ''), // Bersihkan prefiks A/B/C/D
+          isCorrect: idx === item.ans
+        }));
+        
+        let shuffledOpts = shuffleArray(originalOptions);
+        let correctIndex = shuffledOpts.findIndex(o => o.isCorrect);
+
+        return {
+          id: item.id,
+          q: item.q,
+          options: shuffledOpts.map((o, idx) => `${String.fromCharCode(65 + idx)}. ${o.text}`),
+          correctAnswer: correctIndex
+        };
+      });
+    }
+
+    function startQuiz() {
+      namaSiswa = document.getElementById("nama").value.trim();
+      kelasSiswa = document.getElementById("kelas").value;
+
+      if (!namaSiswa || !kelasSiswa) {
+        alert("Harap isi Nama Lengkap dan Kelas terlebih dahulu!");
+        return;
+      }
+
+      prepareShuffledQuiz();
+      requestFullScreen();
+
+      document.getElementById("screen-start").classList.remove("active");
+      document.getElementById("screen-quiz").classList.add("active");
+
+      startTimer();
+      setupSecurityListeners();
+      renderGridNavigation();
+      renderQuestion();
+    }
+
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        timeRemaining--;
+        let mins = Math.floor(timeRemaining / 60);
+        let secs = timeRemaining % 60;
+        document.getElementById("text-timer").innerText = 
+          `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+
+        if (timeRemaining <= 0) {
+          clearInterval(timerInterval);
+          alert("Waktu pengerjaan telah habis! Jawaban otomatis terkirim.");
+          submitQuiz("Waktu Habis");
+        }
+      }, 1000);
+    }
+
+    function renderQuestion() {
+      const q = activeQuizData[currentIndex];
+      
+      // Update Top Progress Bar
+      document.getElementById("text-progress").innerHTML = `${currentIndex + 1} <span style="font-size: 12px; color: var(--text-muted);">/ ${activeQuizData.length}</span>`;
+      let progressPercent = ((currentIndex + 1) / activeQuizData.length) * 100;
+      document.getElementById("progress-fill").style.width = `${progressPercent}%`;
+
+      // Render Soal & Opsi
+      document.getElementById("question-text").innerText = `${currentIndex + 1}. ${q.q}`;
+      const container = document.getElementById("options-container");
+      container.innerHTML = "";
+
+      q.options.forEach((optText, idx) => {
+        const item = document.createElement("div");
+        item.className = "option-item" + (userAnswers[q.id] === idx ? " selected" : "");
+        item.innerHTML = `<span>${optText}</span><div class="radio-circle"></div>`;
+        item.onclick = () => {
+          userAnswers[q.id] = idx;
+          renderQuestion();
+          updateGridStatus();
+        };
+        container.appendChild(item);
+      });
+
+      // Update Tombol Next/Prev
+      document.getElementById("btn-prev").style.visibility = currentIndex === 0 ? "hidden" : "visible";
+      if (currentIndex === activeQuizData.length - 1) {
+        document.getElementById("btn-next").innerText = "Kirim Jawaban";
+        document.getElementById("btn-next").style.background = "var(--success)";
+      } else {
+        document.getElementById("btn-next").innerText = "Next >";
+        document.getElementById("btn-next").style.background = "var(--primary)";
+      }
+
+      updateGridStatus();
+    }
+
+    function renderGridNavigation() {
+      const grid = document.getElementById("grid-navigation");
+      grid.innerHTML = "";
+      activeQuizData.forEach((item, idx) => {
+        const btn = document.createElement("div");
+        btn.id = `grid-btn-${idx}`;
+        btn.className = "grid-num";
+        btn.innerText = idx + 1;
+        btn.onclick = () => {
+          currentIndex = idx;
+          renderQuestion();
+        };
+        grid.appendChild(btn);
+      });
+    }
+
+    function updateGridStatus() {
+      activeQuizData.forEach((item, idx) => {
+        const btn = document.getElementById(`grid-btn-${idx}`);
+        if (!btn) return;
+        btn.className = "grid-num";
+        if (userAnswers[item.id] !== undefined) btn.classList.add("answered");
+        if (idx === currentIndex) btn.classList.add("active");
+      });
+    }
+
+    function navigate(dir) {
+      if (dir === 1 && currentIndex === activeQuizData.length - 1) {
+        if (confirm("Apakah Anda yakin ingin menyelesaikan dan mengirim jawaban?")) {
+          submitQuiz("Selesai Normal");
+        }
+        return;
+      }
+      currentIndex += dir;
+      renderQuestion();
+    }
+
+    function submitQuiz(status = "Selesai Normal") {
+      if (isSubmitted) return;
+      isSubmitted = true;
+      clearInterval(timerInterval);
+
+      let scoreCount = 0;
+      activeQuizData.forEach(q => {
+        if (userAnswers[q.id] === q.correctAnswer) scoreCount++;
+      });
+
+      const totalScore = Math.round((scoreCount / activeQuizData.length) * 100);
+
+      document.getElementById("screen-quiz").classList.remove("active");
+      document.getElementById("screen-result").classList.add("active");
+
+      document.getElementById("res-nama").innerText = namaSiswa;
+      document.getElementById("res-kelas").innerText = kelasSiswa;
+      document.getElementById("res-score").innerText = totalScore;
+
+      if (totalScore >= 75) {
+        document.getElementById("teacher-quote").style.display = "block";
+      }
+
+      const payload = {
+        timestamp: new Date().toLocaleString("id-ID"),
+        nama: namaSiswa,
+        kelas: kelasSiswa,
+        nilai: totalScore,
+        benar: scoreCount,
+        totalSoal: activeQuizData.length,
+        pelanggaran: violations,
+        statusKirim: status,
+        detailJawaban: JSON.stringify(userAnswers)
+      };
+
+      if (SCRIPT_URL && !SCRIPT_URL.includes("GANTI_DENGAN_URL")) {
+        fetch(SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        }).catch(err => console.error(err));
+      }
+    }
+
+    function requestFullScreen() {
+      const doc = document.documentElement;
+      if (doc.requestFullscreen) doc.requestFullscreen();
+      else if (doc.mozRequestFullScreen) doc.mozRequestFullScreen();
+      else if (doc.webkitRequestAnimationFrame) doc.webkitRequestAnimationFrame();
+      else if (doc.msRequestFullscreen) doc.msRequestFullscreen();
+    }
+
+    function registerViolation(reason) {
+      if (isSubmitted) return;
+      violations++;
+      document.getElementById("warning-box").innerText = `Peringatan Violasi: ${violations} / ${maxViolations}`;
+      alert(`PERINGATAN VIOLASI!\nAlasan: ${reason}\nPelanggaran ke-${violations} dari maks ${maxViolations}.`);
+
+      if (violations >= maxViolations) {
+        alert("Batas pelanggaran terlampaui. Kuis otomatis dikirim!");
+        submitQuiz("Diskualifikasi / Auto Submit");
+      }
+    }
+
+    function setupSecurityListeners() {
+      const overlay = document.getElementById("anti-lens-overlay");
+
+      window.addEventListener("blur", () => {
+        overlay.style.display = "flex";
+        registerViolation("Kehilangan fokus layar (Memicu Google Lens / Pindah App).");
+      });
+
+      window.addEventListener("focus", () => {
+        overlay.style.display = "none";
+      });
+
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) overlay.style.display = "flex";
+        else overlay.style.display = "none";
+      });
+
+      history.pushState(null, null, location.href);
+      window.onpopstate = function () {
+        history.pushState(null, null, location.href);
+        registerViolation("Menekan tombol Back.");
+      };
+
+      document.addEventListener("contextmenu", (e) => e.preventDefault());
+      document.addEventListener("copy", (e) => e.preventDefault());
+      document.addEventListener("paste", (e) => e.preventDefault());
+      document.addEventListener("cut", (e) => e.preventDefault());
+    }
+  </script>
+</body>
+</html>
