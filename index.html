@@ -427,7 +427,7 @@
       { id: 23, q: "Menghilangkan bagian yang tidak penting dalam masalah disebut ....", opt: ["A. Abstraksi", "B. Bermain", "C. Menyalin data", "D. Menghapus data"], ans: 0 },
       { id: 24, q: "Dampak dari penggunaan data yang tidak lengkap adalah ....", opt: ["A. Analisis lebih baik", "B. Kesimpulan kurang tepat", "C. Grafik lebih menarik", "D. Penyimpanan lebih cepat"], ans: 1 },
       { id: 25, q: "Manfaat utama dari analisis data adalah ....", opt: ["A. Membantu pengambilan keputusan", "B. Menghapus informasi", "C. Menambah masalah", "D. Mengurangi fakta"], ans: 0 },
-      { id: 26, q: "Visualisasi diagram garis sangat cocok digunakan untuk ....", opt: ["A. Menampilkan perkembangan data dari waktu ke waktu", "B. Menampilkan foto", "C. Menyimpan data", "D. Menulis laporan"], opt: 0, ans: 0 },
+      { id: 26, q: "Visualisasi diagram garis sangat cocok digunakan untuk ....", opt: ["A. Menampilkan perkembangan data dari waktu ke waktu", "B. Menampilkan foto", "C. Menyimpan data", "D. Menulis laporan"], ans: 0 },
       { id: 27, q: "Diagram lingkaran (pie chart) digunakan untuk memperlihatkan ....", opt: ["A. Urutan proses", "B. Hubungan data", "C. Persentase bagian dari keseluruhan", "D. Perubahan waktu"], ans: 2 },
       { id: 28, q: "Salah satu contoh data kuantitatif di bawah ini adalah ....", opt: ["A. Nama siswa", "B. Alamat siswa", "C. Umur siswa", "D. Hobi siswa"], ans: 2 },
       { id: 29, q: "Struktur kumpulan data yang disusun dalam bentuk baris dan kolom disebut ....", opt: ["A. Grafik", "B. Tabel", "C. Diagram", "D. Algoritma"], ans: 1 },
@@ -468,7 +468,7 @@
       let shuffled = shuffleArray(rawQuizData);
       activeQuizData = shuffled.map(item => {
         let originalOptions = item.opt.map((optText, idx) => ({
-          text: optText.replace(/^[A-D]\.\s*/, ''), // Bersihkan prefiks A/B/C/D
+          text: optText.replace(/^[A-D]\.\s*/, ''),
           isCorrect: idx === item.ans
         }));
         
